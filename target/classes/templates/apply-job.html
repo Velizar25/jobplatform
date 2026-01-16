@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head('Apply')}"></head>
+
+<body th:replace="~{layout :: page('Apply', ~{::content})}">
+
+<th:block th:fragment="content">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1 class="m-0">Apply for job</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/jobs}">Jobs</a></li>
+                        <li class="breadcrumb-item active">Apply</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div th:if="${message}" class="alert alert-warning">
+                <span th:text="${message}">Message</span>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bold" th:text="${job.title}">Job title</h3>
+                </div>
+
+                <div class="card-body">
+                    <p th:if="${job.location}" class="mb-2">
+                        <i class="fas fa-map-marker-alt mr-1 text-muted"></i>
+                        <strong>Location:</strong> <span th:text="${job.location}">Location</span>
+                    </p>
+
+                    <p th:if="${job.description}" th:text="${job.description}" class="text-muted mb-0"></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-file-upload mr-1"></i> Upload CV</h3>
+                </div>
+
+                <div class="card-body">
+                    <form th:action="@{'/jobs/' + ${job.id} + '/apply'}"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label>CV file (PDF / DOC / DOCX)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="cvFile" name="cv" required>
+                                <label class="custom-file-label" for="cvFile">Choose file</label>
+                            </div>
+                            <small class="form-text text-muted">Max size: 20MB</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane mr-1"></i> Submit application
+                        </button>
+
+                        <a class="btn btn-outline-secondary ml-2" th:href="@{/jobs}">
+                            <i class="fas fa-arrow-left mr-1"></i> Back
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // показва името на файла в custom-file label (Bootstrap 4)
+        document.addEventListener("change", function (e) {
+            if (e.target && e.target.id === "cvFile") {
+                const fileName = e.target.files && e.target.files.length ? e.target.files[0].name : "Choose file";
+                const label = document.querySelector("label[for='cvFile'].custom-file-label");
+                if (label) label.textContent = fileName;
+            }
+        });
+    </script>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register – JobPlatform</title>
+
+    <!-- Bootstrap (имаш го в проекта през webjars в други темплейти) -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+
+    <style>
+        body { background: #f4f6f9; }
+        .auth-wrap { min-height: 100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+        .auth-card { width: 100%; max-width: 520px; border:0; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+        .brand { font-weight:700; letter-spacing:.2px; }
+        .muted { color:#6c757d; }
+    </style>
+</head>
+
+<body>
+<div class="auth-wrap">
+    <div class="card auth-card">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="mb-3">
+                <div class="brand h4 mb-1">Create account</div>
+                <div class="muted">Register to apply for jobs and manage your CVs.</div>
+            </div>
+
+            <!-- Error / Success -->
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+            <form th:action="@{/register}" th:object="${user}" method="post" class="mt-3">
+
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" th:field="*{username}" placeholder="e.g. gosho" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="name@example.com" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" th:field="*{password}" placeholder="••••••" minlength="4" required>
+                    <div class="form-text">Minimum 4 characters.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-2">Create account</button>
+
+                <div class="text-center mt-3">
+                    <a th:href="@{/login}">Back to login</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

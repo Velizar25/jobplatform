@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head('Post new job')}"></head>
+
+<body th:replace="~{layout :: page('Post new job', ~{::content})}">
+
+<th:block th:fragment="content">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Post new job</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/jobs}">Jobs</a></li>
+                        <li class="breadcrumb-item active">New</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold">Job details</h3>
+                    </div>
+
+                    <form th:action="@{/jobs}" th:object="${job}" method="post">
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input id="title"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{title}"
+                                       placeholder="e.g. Senior Frontend Developer"
+                                       required>
+                            </div>
+
+                            <!-- ✅ NEW: Company -->
+                            <div class="form-group">
+                                <label for="company">Company</label>
+                                <input id="company"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{company}"
+                                       placeholder="e.g. BrightCode Studio"
+                                       required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input id="location"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{location}"
+                                       placeholder="e.g. Sofia">
+                            </div>
+
+                            <!-- ✅ NEW: Employment type -->
+                            <div class="form-group">
+                                <label for="employmentType">Employment type</label>
+                                <input id="employmentType"
+                                       type="text"
+                                       class="form-control"
+                                       th:field="*{employmentType}"
+                                       placeholder="e.g. Full-time / Part-time / Internship / Hybrid / Remote">
+                                <small class="text-muted">
+                                    Example: "Internship (Hybrid)" or "Full-time (Remote)".
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description"
+                                          class="form-control"
+                                          rows="10"
+                                          th:field="*{description}"
+                                          placeholder="Paste a well-structured job description (Responsibilities, Requirements, Nice to have, Offer...)"
+                                          required></textarea>
+                                <small class="text-muted">
+                                    Tip: Use sections like Responsibilities / Requirements / Nice to have / Offer.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer d-flex" style="gap:10px;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check mr-1"></i> Publish
+                            </button>
+
+                            <a class="btn btn-outline-secondary" th:href="@{/jobs}">
+                                <i class="fas fa-arrow-left mr-1"></i> Back
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold">Example format</h3>
+                    </div>
+                    <div class="card-body text-sm">
+<pre style="white-space:pre-wrap; margin:0;">
+Company: BrightCode Studio
+Location: Sofia
+Employment type: Full-time (Hybrid)
+
+Responsibilities:
+• ...
+
+Requirements:
+• ...
+
+Nice to have:
+• ...
+
+What we offer:
+• ...
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</th:block>
+</body>
+</html>

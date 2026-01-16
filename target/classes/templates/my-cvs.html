@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head('My CVs')}"></head>
+
+<body th:replace="~{layout :: page('My CVs', ~{::content})}">
+
+<th:block th:fragment="content">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1 class="m-0">My CVs</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                        <li class="breadcrumb-item active">My CVs</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div th:if="${message}" class="alert alert-info">
+                <span th:text="${message}">Message</span>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-id-card mr-1"></i> CV List</h3>
+                    <div class="card-tools">
+                        <a class="btn btn-sm btn-primary" th:href="@{/cv/upload}">
+                            <i class="fas fa-upload mr-1"></i> Upload new
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Type</th>
+                                <th>In use</th>
+                                <th style="width:220px;">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="cv : ${cvs}">
+                                <td th:text="${cv.filename}">cv.pdf</td>
+                                <td>
+                                    <span class="text-muted" th:text="${cv.fileType}">application/pdf</span>
+                                </td>
+                                <td>
+                                    <span th:if="${inUse != null and inUse.contains(cv.id)}"
+                                          class="badge badge-success">Yes</span>
+                                    <span th:if="${inUse == null or !inUse.contains(cv.id)}"
+                                          class="badge badge-secondary">No</span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       th:href="@{|/cvs/${cv.id}/download|}">
+                                        <i class="fas fa-download mr-1"></i> Download
+                                    </a>
+
+                                    <form th:action="@{|/cvs/${cv.id}/delete|}" method="post"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Delete this CV?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash mr-1"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(cvs)}">
+                                <td colspan="4" class="text-center text-muted p-4">
+                                    No CVs yet.
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</th:block>
+</body>
+</html>

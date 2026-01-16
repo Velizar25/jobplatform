@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head('Profile')}"></head>
+
+<body th:replace="~{layout :: page('Profile', ~{::content})}">
+
+<th:block th:fragment="content">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1 class="m-0">Profile</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                        <li class="breadcrumb-item active">Profile</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div th:if="${param.success}" class="alert alert-success">
+                Profile updated successfully.
+            </div>
+            <div th:if="${param.error}" class="alert alert-danger" th:text="${param.error}"></div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-user mr-1"></i> Account details</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <form th:action="@{/profile}" method="post">
+
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control" th:value="${user.username}" readonly>
+                                    <small class="form-text text-muted">Username is fixed.</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" name="email" th:value="${user.email}" required>
+                                </div>
+
+                                <hr/>
+
+                                <div th:if="${!isOAuth}">
+                                    <h5 class="mb-2">Change password (optional)</h5>
+                                    <p class="text-muted">Leave blank to keep your current password.</p>
+
+                                    <div class="form-group">
+                                        <label>New password</label>
+                                        <input type="password" class="form-control" name="password" minlength="4" placeholder="••••••">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Confirm new password</label>
+                                        <input type="password" class="form-control" name="confirmPassword" placeholder="••••••">
+                                    </div>
+                                </div>
+
+                                <div th:if="${isOAuth}" class="alert alert-info">
+                                    This account is logged in via Google. Password cannot be changed.
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block mt-3">
+                                    <i class="fas fa-save mr-1"></i> Save changes
+                                </button>
+
+                                <a class="btn btn-outline-secondary btn-block" th:href="@{/jobs}">
+                                    <i class="fas fa-arrow-left mr-1"></i> Back
+                                </a>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</th:block>
+</body>
+</html>

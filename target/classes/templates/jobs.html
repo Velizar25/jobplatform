@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout :: head('Jobs')}"></head>
+
+<body th:replace="~{layout :: page('Jobs', ~{::content})}">
+
+<th:block th:fragment="content">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1 class="m-0">Jobs</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                        <li class="breadcrumb-item active">Jobs</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="d-flex flex-wrap align-items-center mb-3" style="gap:10px;">
+
+                <a class="btn btn-primary"
+                   th:href="@{/jobs/new}"
+                   sec:authorize="hasRole('ADMIN')">
+                    <i class="fas fa-plus mr-1"></i> Post new job
+                </a>
+
+                <a class="btn btn-outline-secondary" th:href="@{/applications}">
+                    <i class="fas fa-file-signature mr-1"></i> View applications
+                </a>
+
+                <form th:action="@{/jobs/clear}" method="post" class="m-0"
+                      sec:authorize="hasRole('ADMIN')"
+                      onsubmit="return confirm('Move ALL jobs to recycle bin?')">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-trash mr-1"></i> Clear all jobs
+                    </button>
+                </form>
+
+                <form th:action="@{/jobs/restore-all}" method="post" class="m-0"
+                      sec:authorize="hasRole('ADMIN')"
+                      onsubmit="return confirm('Restore ALL jobs?')">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-undo mr-1"></i> Restore all
+                    </button>
+                </form>
+
+            </div>
+
+            <div th:if="${#lists.isEmpty(jobs)}" class="card">
+                <div class="card-body">
+                    <p class="mb-0 text-muted">No jobs yet.</p>
+                </div>
+            </div>
+
+            <div class="row" th:if="${!#lists.isEmpty(jobs)}">
+                <div class="col-lg-6" th:each="job : ${jobs}">
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3 class="card-title font-weight-bold"
+                                th:text="${job.title}">Job title</h3>
+                        </div>
+
+                        <div class="card-body">
+
+                            <!-- ✅ NEW: Company (над Location) -->
+                            <p th:if="${job.company}" class="mb-2">
+                                <i class="fas fa-building mr-1 text-muted"></i>
+                                <strong>Company:</strong>
+                                <span th:text="${job.company}">Company</span>
+                            </p>
+
+                            <p th:if="${job.location}" class="mb-2">
+                                <i class="fas fa-map-marker-alt mr-1 text-muted"></i>
+                                <strong>Location:</strong>
+                                <span th:text="${job.location}">Location</span>
+                            </p>
+
+                            <!-- ✅ NEW: Employment type -->
+                            <p th:if="${job.employmentType}" class="mb-3">
+                                <i class="fas fa-briefcase mr-1 text-muted"></i>
+                                <strong>Employment:</strong>
+                                <span th:text="${job.employmentType}">Full-time</span>
+                            </p>
+
+                            <!-- ✅ ОПРАВЕНО: пази новите редове -->
+                            <pre th:if="${job.description}"
+                                 th:text="${job.description}"
+                                 class="text-muted"
+                                 style="white-space: pre-wrap; font-family: inherit; margin: 0;">
+                            </pre>
+
+                        </div>
+
+                        <div class="card-footer d-flex flex-wrap" style="gap:10px;">
+
+                            <a class="btn btn-primary"
+                               th:href="@{'/jobs/' + ${job.id} + '/apply'}">
+                                <i class="fas fa-paper-plane mr-1"></i> Apply
+                            </a>
+
+                            <a class="btn btn-outline-secondary"
+                               sec:authorize="hasRole('ADMIN')"
+                               th:href="@{'/jobs/' + ${job.id} + '/edit'}">
+                                <i class="fas fa-pen mr-1"></i> Edit
+                            </a>
+
+                            <form th:action="@{'/jobs/' + ${job.id} + '/delete'}"
+                                  method="post"
+                                  sec:authorize="hasRole('ADMIN')"
+                                  onsubmit="return confirm('Move this job to recycle bin?')"
+                                  class="m-0">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash mr-1"></i> Delete
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</th:block>
+</body>
+</html>
