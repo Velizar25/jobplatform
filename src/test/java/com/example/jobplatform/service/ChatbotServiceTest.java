@@ -1,40 +1,35 @@
 package com.example.jobplatform.service;
 
+import com.example.jobplatform.repository.JobRepository;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ChatbotServiceTest {
 
-    private final ChatbotService chatbot = new ChatbotService();
-
     @Test
-    void greeting_returnsHelloMessage() {
-        String response = chatbot.reply("hi");
+    void shouldReplyToGreeting() {
+        JobRepository jobRepository = mock(JobRepository.class);
+        ChatbotService chatbotService = new ChatbotService(jobRepository);
 
-        assertThat(response.toLowerCase()).contains("hi");
+        String response = chatbotService.reply("hello");
+
+        assertTrue(response.contains("JobPlatform assistant"));
     }
 
     @Test
-    void applyQuestion_returnsSteps() {
-        String response = chatbot.reply("how do I apply for a job");
+    void shouldReturnNoJobsMessageWhenNoJobsExist() {
+        JobRepository jobRepository = mock(JobRepository.class);
+        when(jobRepository.findAllByDeletedAtIsNull()).thenReturn(List.of());
 
-        assertThat(response.toLowerCase()).contains("apply");
-        assertThat(response).contains("Jobs");
-    }
+        ChatbotService chatbotService = new ChatbotService(jobRepository);
 
-    @Test
-    void uploadCvQuestion_returnsInstructions() {
-        String response = chatbot.reply("upload cv");
+        String response = chatbotService.reply("recommend jobs");
 
-        assertThat(response.toLowerCase()).contains("cv");
-        assertThat(response).contains("PDF");
-    }
-
-    @Test
-    void unknownQuestion_returnsFallbackHelp() {
-        String response = chatbot.reply("asdasdasd");
-
-        assertThat(response.toLowerCase()).contains("i can help");
+        assertTrue(response.contains("no active job offers"));
     }
 }

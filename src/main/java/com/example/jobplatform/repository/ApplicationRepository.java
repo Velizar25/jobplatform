@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
-    // ✅ за "само моите кандидатури"
+
     List<Application> findByApplicant_UsernameOrderByIdDesc(String username);
 
-    // ✅ за admin – всички кандидатури
+
     List<Application> findAllByOrderByIdDesc();
 
-    // (оставяме старите ти методи – може да ги ползват други места)
+
     List<Application> findByCv_Owner_Username(String username);
 
     List<Application> findByCv_Id(Long cvId);

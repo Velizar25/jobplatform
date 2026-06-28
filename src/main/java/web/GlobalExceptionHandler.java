@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
                                   HttpServletRequest request,
                                   RedirectAttributes ra) {
         ra.addFlashAttribute("message", "File too large. Max allowed is 20 MB.");
-        // ако идваш от apply формата – ще те върне там; иначе към /cv/upload
+
         return redirectBack(request, "/cv/upload");
     }
 

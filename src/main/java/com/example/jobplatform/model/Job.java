@@ -14,7 +14,6 @@ public class Job {
     @Column(nullable = false, length = 150)
     private String title;
 
-    // 👇 важно: name = "company"
     @Column(name = "company", nullable = false, length = 100)
     private String company;
 
@@ -24,17 +23,17 @@ public class Job {
     @Column(length = 100)
     private String location;
 
-    // 👇 важно: name = "employment_type"
     @Column(name = "employment_type", length = 50)
     private String employmentType;
 
-    // Soft delete
+    @Column(name = "required_skills", length = 1000)
+    private String requiredSkills;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public Job() {}
-
-    // ===== Getters & Setters =====
+    public Job() {
+    }
 
     public Long getId() {
         return id;
@@ -82,6 +81,14 @@ public class Job {
 
     public void setEmploymentType(String employmentType) {
         this.employmentType = employmentType;
+    }
+
+    public String getRequiredSkills() {
+        return requiredSkills;
+    }
+
+    public void setRequiredSkills(String requiredSkills) {
+        this.requiredSkills = requiredSkills;
     }
 
     public LocalDateTime getDeletedAt() {
